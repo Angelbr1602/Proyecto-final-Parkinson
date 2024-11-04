@@ -1,0 +1,47 @@
+input.onButtonPressed(Button.A, function () {
+    // Cambia el incremento para ajustes más finos
+    umbral += 50
+})
+input.onButtonPressed(Button.AB, function () {
+    basic.showNumber(umbral)
+})
+input.onButtonPressed(Button.B, function () {
+    // Cambia el decremento para ajustes más finos
+    umbral += 0 - 50
+    if (umbral < 100) {
+        umbral = 100
+    }
+})
+let totalAcc = 0
+let accZ = 0
+let accY = 0
+let accX = 0
+let umbral = 0
+umbral = 1500
+// Umbral adaptativo inicial
+let umbralAdaptativo = umbral
+// Umbral adaptativo inicial
+basic.forever(function () {
+    accX = input.acceleration(Dimension.X)
+    accY = input.acceleration(Dimension.Y)
+    accZ = input.acceleration(Dimension.Z)
+    totalAcc = Math.sqrt(accX * accX + accY * accY + accZ * accZ)
+    if (totalAcc > umbralAdaptativo) {
+        // Activa el buzzer
+        pins.digitalWritePin(DigitalPin.P0, 1)
+        // Mensaje de alerta
+        basic.showString("Alerta!")
+    } else {
+        // Desactiva el buzzer
+        pins.digitalWritePin(DigitalPin.P0, 0)
+        basic.clearScreen()
+    }
+    // Ajuste automático del umbral
+    if (totalAcc < umbralAdaptativo) {
+        // Disminuye el umbral
+        umbralAdaptativo = Math.max(50, umbralAdaptativo - 10)
+    } else {
+        // Restablece el umbral si se excede
+        umbralAdaptativo = umbral
+    }
+})
