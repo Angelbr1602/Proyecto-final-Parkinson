@@ -17,16 +17,16 @@ let accZ = 0
 let accY = 0
 let accX = 0
 let umbral = 0
-umbral = 1500
+umbral = 1550
 // Umbral adaptativo inicial
-let umbralAdaptativo = umbral
+let umbralAdaptativo = 1500
 // Umbral adaptativo inicial
 basic.forever(function () {
     accX = input.acceleration(Dimension.X)
     accY = input.acceleration(Dimension.Y)
     accZ = input.acceleration(Dimension.Z)
     totalAcc = Math.sqrt(accX * accX + accY * accY + accZ * accZ)
-    if (totalAcc > umbralAdaptativo) {
+    if (totalAcc > 1600) {
         // Activa el buzzer
         pins.digitalWritePin(DigitalPin.P0, 1)
         // Mensaje de alerta
@@ -42,6 +42,6 @@ basic.forever(function () {
         umbralAdaptativo = Math.max(50, umbralAdaptativo - 10)
     } else {
         // Restablece el umbral si se excede
-        umbralAdaptativo = umbral
+        umbralAdaptativo = 1500
     }
 })
